@@ -8,6 +8,8 @@ import fontys.util.*;
  */
 public interface IBank {
 
+
+
     /**
      * creatie van een nieuwe bankrekening met een identificerend rekeningnummer; 
      * alleen als de klant, geidentificeerd door naam en plaats, nog niet bestaat 

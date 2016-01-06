@@ -1,9 +1,11 @@
 package bank.internettoegang;
 
-import java.rmi.*;
+import bank.bankieren.IBank;
+
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
-import bank.bankieren.*;
+import java.util.HashMap;
+import java.util.Random;
 
 public class Balie extends UnicastRemoteObject implements IBalie {
 

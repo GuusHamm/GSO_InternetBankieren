@@ -11,19 +11,8 @@
 
 package bank.gui;
 
-import bank.gui.BankSelectController;
-import bank.gui.BankierSessieController;
-import bank.gui.LoginController;
-import bank.gui.OpenRekeningController;
 import bank.internettoegang.IBalie;
 import bank.internettoegang.IBankiersessie;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.rmi.Naming;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,6 +20,14 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.rmi.Naming;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
