@@ -1,5 +1,6 @@
 package bank.bankieren;
 
+import fontys.util.NumberDoesntExistException;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -11,12 +12,14 @@ import static org.hamcrest.CoreMatchers.*;
 public class BankTest {
 
 	private Bank bank;
+	private Bank raboBank;
 	private String name;
 	private String place;
 
 	@Before
 	public void setUp() throws Exception {
 		bank = new Bank("SNS");
+		raboBank = new Bank("Rabobank");
 		name = "Jan Janssen";
 		place = "Helmond";
 	}
@@ -64,32 +67,47 @@ public class BankTest {
 	}
 
 	//	/**
-//	 * er wordt bedrag overgemaakt van de bankrekening met nummer bron naar de
-//	 * bankrekening met nummer bestemming, mits het afschrijven van het bedrag
-//	 * van de rekening met nr bron niet lager wordt dan de kredietlimiet van deze
-//	 * rekening
-//	 *
-//	 * @param bron
-//	 * @param bestemming
-//	 *            ongelijk aan bron
-//	 * @param bedrag
-//	 *            is groter dan 0
-//	 * @return <b>true</b> als de overmaking is gelukt, anders <b>false</b>
-//	 * @throws NumberDoesntExistException
-//	 *             als een van de twee bankrekeningnummers onbekend is
-//	 */
-	@Test
-	public void testGetRekening() throws Exception {
+	//	 * er wordt bedrag overgemaakt van de bankrekening met nummer bron naar de
+	//	 * bankrekening met nummer bestemming, mits het afschrijven van het bedrag
+	//	 * van de rekening met nr bron niet lager wordt dan de kredietlimiet van deze
+	//	 * rekening
+	//	 *
+	//	 * @param bron
+	//	 * @param bestemming
+	//	 *            ongelijk aan bron
+	//	 * @param bedrag
+	//	 *            is groter dan 0
+	//	 * @return <b>true</b> als de overmaking is gelukt, anders <b>false</b>
+	//	 * @throws NumberDoesntExistException
+	//	 *             als een van de twee bankrekeningnummers onbekend is
+	//	 */
 
-	}
-
-	//	/**
-//	 * @param nr
-//	 * @return de bankrekening met nummer nr mits bij deze bank bekend, anders null
-//	 */
 	@Test
 	public void testMaakOver() throws Exception {
+		int rekeningSource = bank.openRekening(name, place);
+		int rekeningDestination = bank.openRekening("Tim Daniels", "Casteren");
 
+		Money m = new Money(5000, "€");
+		assertTrue(bank.maakOver(rekeningSource ,rekeningDestination, m));
+	}
+
+	@Test (expected = RuntimeException.class)
+	public void testMaakOverSourceEqualsDestination() throws Exception {
+		Money m = new Money(5000, "€");
+		//Source and destination are the same
+		bank.maakOver(1, 1, m);
+	}
+
+	@Test (expected = RuntimeException.class)
+	public void testMaakOverNegativeAmount() throws Exception {
+		Money m = new Money(-5000, "€");
+		bank.maakOver(1, 2, m);
+	}
+
+	@Test (expected = NumberDoesntExistException.class)
+	public void testMaakOverInvalidNumber() throws Exception {
+		Money m = new Money(5000, "€");
+		bank.maakOver(987654213, 123456789, m);
 	}
 
 	//	/**
@@ -97,6 +115,10 @@ public class BankTest {
 //	 */
 	@Test
 	public void testGetName() throws Exception {
+		String bankNaam = bank.getName();
+		String bankNaam2 = raboBank.getName();
 
+		assertEquals("The names aren't equal", bankNaam, "SNS");
+		assertEquals("The names aren't equal", bankNaam2, "Rabobank");
 	}
 }

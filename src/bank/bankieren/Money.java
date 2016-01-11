@@ -18,7 +18,7 @@ public class Money implements Serializable, Comparable<Money> {
 	/**
 	 * er is een geldbedrag van munteenheid currency en waarde cents gecreeerd
 	 * 
-	 * @param amount
+	 * @param cents
 	 * @param currency
 	 * @throws RuntimeException
 	 *             als currency een lege string is
