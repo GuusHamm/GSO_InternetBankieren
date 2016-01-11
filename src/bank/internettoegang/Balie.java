@@ -32,8 +32,9 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 			return null;
 
 		int nr = bank.openRekening(naam, plaats);
-		if (nr == -1)
-			return null;
+		//-1 will only occur when name or city is empty, which is already caught a bit higher.
+//		if (nr == -1)
+//			return null;
 
 		String accountname = generateId(8);
 		while (loginaccounts.containsKey(accountname))
