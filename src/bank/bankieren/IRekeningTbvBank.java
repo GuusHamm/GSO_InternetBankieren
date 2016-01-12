@@ -11,5 +11,4 @@ interface IRekeningTbvBank extends IRekening {
 	 */
 	boolean muteer(Money bedrag);
 	
-
 }
