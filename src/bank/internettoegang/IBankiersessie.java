@@ -2,13 +2,19 @@ package bank.internettoegang;
 
 import bank.bankieren.IRekening;
 import bank.bankieren.Money;
+import fontys.observer.BasicPublisher;
+import fontys.observer.RemotePropertyListener;
+import fontys.observer.RemotePublisher;
 import fontys.util.InvalidSessionException;
 import fontys.util.NumberDoesntExistException;
 
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Observer;
 
-public interface IBankiersessie extends Remote {
+public interface IBankiersessie extends Remote, RemotePublisher{
 
 	//TODO Change this back
 	long GELDIGHEIDSDUUR = 60000000;

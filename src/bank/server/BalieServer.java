@@ -9,6 +9,14 @@ import bank.bankieren.Bank;
 import bank.gui.BankierClient;
 import bank.internettoegang.Balie;
 import bank.internettoegang.IBalie;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,14 +24,6 @@ import java.rmi.Naming;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
-import static javafx.application.Application.launch;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 /**
  *
@@ -35,6 +35,7 @@ public class BalieServer extends Application {
     private final double MINIMUM_WINDOW_WIDTH = 600.0;
     private final double MINIMUM_WINDOW_HEIGHT = 200.0;
     private String nameBank;
+    private CentraleBank centraleBank;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -47,6 +48,7 @@ public class BalieServer extends Application {
             gotoBankSelect();
 
             primaryStage.show();
+            //centraleBank = new CentraleBank();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

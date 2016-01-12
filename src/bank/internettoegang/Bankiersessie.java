@@ -1,14 +1,15 @@
 package bank.internettoegang;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-
 import bank.bankieren.IBank;
 import bank.bankieren.IRekening;
 import bank.bankieren.Money;
-
+import fontys.observer.BasicPublisher;
+import fontys.observer.RemotePropertyListener;
 import fontys.util.InvalidSessionException;
 import fontys.util.NumberDoesntExistException;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 public class Bankiersessie extends UnicastRemoteObject implements
 		IBankiersessie {
@@ -17,13 +18,18 @@ public class Bankiersessie extends UnicastRemoteObject implements
 	private long laatsteAanroep;
 	private int reknr;
 	private IBank bank;
+	private BasicPublisher basicPublisher;
 
 	public Bankiersessie(int reknr, IBank bank) throws RemoteException {
 		laatsteAanroep = System.currentTimeMillis();
 		this.reknr = reknr;
 		this.bank = bank;
-		
+
+		String[] prop = new String[1];
+		prop[0] = "RekeningSessie";
+		basicPublisher = new BasicPublisher(prop);
 	}
+
 
 	public boolean isGeldig() {
 		return System.currentTimeMillis() - laatsteAanroep < GELDIGHEIDSDUUR;
@@ -41,8 +47,12 @@ public class Bankiersessie extends UnicastRemoteObject implements
 					"source and destination must be different");
 		if (!bedrag.isPositive())
 			throw new RuntimeException("amount must be positive");
-		
-		return bank.maakOver(reknr, bestemming, bedrag);
+
+		boolean succes = bank.maakOver(reknr, bestemming, bedrag);
+
+		basicPublisher.inform(this, "RekeningSessie", null, reknr);
+
+		return succes;
 	}
 
 	private void updateLaatsteAanroep() throws InvalidSessionException {
@@ -67,4 +77,15 @@ public class Bankiersessie extends UnicastRemoteObject implements
 		UnicastRemoteObject.unexportObject(this, true);
 	}
 
+	@Override
+	public void addListener(RemotePropertyListener remotePropertyListener, String s) throws RemoteException
+	{
+		basicPublisher.addListener(remotePropertyListener, s);
+	}
+
+	@Override
+	public void removeListener(RemotePropertyListener remotePropertyListener, String s) throws RemoteException
+	{
+		basicPublisher.removeListener(remotePropertyListener, s);
+	}
 }

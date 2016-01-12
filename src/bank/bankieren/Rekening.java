@@ -1,12 +1,16 @@
 package bank.bankieren;
 
-class Rekening implements IRekeningTbvBank {
+import bank.internettoegang.IBankiersessie;
+
+class Rekening implements IRekeningTbvBank
+{
 
     private static final long serialVersionUID = 7221569686169173632L;
     private static final int KREDIETLIMIET = -10000;
     private int nr;
     private IKlant eigenaar;
     private Money saldo;
+    private IBankiersessie iBankiersessie;
 
     /**
      * creatie van een bankrekening met saldo van 0.0<br>
@@ -35,6 +39,7 @@ class Rekening implements IRekeningTbvBank {
         this.nr = number;
         this.eigenaar = klant;
         this.saldo = saldo;
+        this.iBankiersessie = iBankiersessie;
     }
 
     public boolean equals(Object obj) {

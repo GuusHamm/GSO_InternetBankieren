@@ -1,9 +1,15 @@
 package bank.internettoegang;
 
-import java.rmi.*;
+import fontys.observer.RemotePropertyListener;
+import fontys.observer.RemotePublisher;
+
+import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 
-public interface IBalie extends Remote {
+public interface IBalie extends Remote, RemotePublisher, RemotePropertyListener, Serializable
+{
   /**
    * creatie van een nieuwe bankrekening; het gegenereerde bankrekeningnummer is
    * identificerend voor de nieuwe bankrekening en heeft een saldo van 0 euro

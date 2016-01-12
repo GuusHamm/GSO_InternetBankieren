@@ -1,7 +1,10 @@
 package bank.internettoegang;
 
 import bank.bankieren.IBank;
+import fontys.observer.BasicPublisher;
+import fontys.observer.RemotePropertyListener;
 
+import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
@@ -15,11 +18,19 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 	//private Collection<IBankiersessie> sessions;
 	private java.util.Random random;
 
+	//Basic publisher
+	private BasicPublisher basicPublisher;
+
 	public Balie(IBank bank) throws RemoteException {
 		this.bank = bank;
 		loginaccounts = new HashMap<String, ILoginAccount>();
 		//sessions = new HashSet<IBankiersessie>();
 		random = new Random();
+
+		//Basic publisher stuff
+		String[] props = new String[1];
+		props[0] = "Rekening";
+		basicPublisher = new BasicPublisher(props);
 	}
 
 	public String openRekening(String naam, String plaats, String wachtwoord) {
@@ -54,7 +65,8 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 			IBankiersessie sessie = new Bankiersessie(loginaccount
 					.getReknr(), bank);
 			
-		 	return sessie;
+		 	sessie.addListener(this, "RekeningSessie");
+			return sessie;
 		}
 		else return null;
 	}
@@ -71,4 +83,21 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 	}
 
 
+	@Override
+	public void propertyChange(PropertyChangeEvent propertyChangeEvent) throws RemoteException
+	{
+		basicPublisher.inform(this, "Rekening", null, propertyChangeEvent.getNewValue());
+	}
+
+	@Override
+	public void addListener(RemotePropertyListener remotePropertyListener, String s) throws RemoteException
+	{
+		basicPublisher.addListener(remotePropertyListener, s);
+	}
+
+	@Override
+	public void removeListener(RemotePropertyListener remotePropertyListener, String s) throws RemoteException
+	{
+		basicPublisher.removeListener(remotePropertyListener, s);
+	}
 }

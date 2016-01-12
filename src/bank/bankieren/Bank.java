@@ -1,9 +1,11 @@
 package bank.bankieren;
 
-import fontys.util.*;
+import fontys.util.NumberDoesntExistException;
 
-import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Bank implements IBank {
 
