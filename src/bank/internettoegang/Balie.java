@@ -32,7 +32,7 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 			return null;
 
 		int nr = bank.openRekening(naam, plaats);
-		//-1 will only occur when name or city is empty, which is already caught a bit higher.
+		//-1 will only occur when name or city is empty, which is already caught in the lines above.
 //		if (nr == -1)
 //			return null;
 

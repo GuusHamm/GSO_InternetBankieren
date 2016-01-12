@@ -121,14 +121,18 @@ public class BankierSessieController implements Initializable {
 
     @FXML
     private void transfer(ActionEvent event) {
+        //When transfering money to another account
         try {
             int from = Integer.parseInt(tfAccountNr.getText());
             int to = Integer.parseInt(tfToAccountNr.getText());
             if (from == to) {
                 taMessage.setText("can't transfer money to your own account");
+                return;
             }
             long centen = (long) (Double.parseDouble(tfAmount.getText()) * 100);
             sessie.maakOver(to, new Money(centen, Money.EURO));
+            //Setting the balance textfield, only on current client, not other client!
+            setTfBalance();
         } catch (RemoteException e1) {
             e1.printStackTrace();
             taMessage.setText("verbinding verbroken");
