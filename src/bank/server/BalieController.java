@@ -6,18 +6,6 @@
 
 package bank.server;
 
-import bank.bankieren.Bank;
-import bank.gui.BankierClient;
-import bank.internettoegang.Balie;
-import bank.internettoegang.IBalie;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.rmi.Naming;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,6 +14,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class

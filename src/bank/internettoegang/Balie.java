@@ -28,7 +28,7 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 		if (plaats.equals(""))
 			return null;
 
-		if (wachtwoord.length() < 4 || wachtwoord.length() > 8)
+		if (wachtwoord.length() < 4 ||	 wachtwoord.length() > 8)
 			return null;
 
 		int nr = bank.openRekening(naam, plaats);
