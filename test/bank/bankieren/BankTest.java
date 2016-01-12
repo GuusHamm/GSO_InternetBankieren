@@ -92,6 +92,11 @@ public class BankTest {
 	}
 
 	@Test (expected = RuntimeException.class)
+	public void testMaakOverInvalidCurrency() throws Exception {
+		new Money(5000, "$");
+	}
+
+	@Test (expected = RuntimeException.class)
 	public void testMaakOverSourceEqualsDestination() throws Exception {
 		Money m = new Money(5000, "€");
 		//Source and destination are the same
