@@ -83,7 +83,7 @@ public class BankiersessieTest  {
 		long newBalance2 = iRekening2.getSaldo().getCents();
 
 		Assert.assertThat(originalBalance,not(newBalance));
-		Assert.assertThat(originalBalance2,not(newBalance2));
+		Assert.assertThat("Gaat fout", originalBalance2,not(newBalance2));
     }
 
 	@Test (expected = RuntimeException.class)

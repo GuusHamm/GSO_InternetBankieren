@@ -14,8 +14,11 @@ import fontys.util.NumberDoesntExistException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -74,6 +77,29 @@ public class BankierSessieController implements Initializable {
             taMessage.setText("verbinding verbroken");
             Logger.getLogger(BankierSessieController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void setTfBalance() {
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                IRekening rekening = null;
+                try {
+                    rekening = sessie.getRekening();
+                    tfBalance.setText(rekening.getSaldo() + "");
+                }
+                catch (RemoteException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (InvalidSessionException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
