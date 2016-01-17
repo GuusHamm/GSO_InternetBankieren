@@ -44,6 +44,20 @@ public class CentraleBank extends UnicastRemoteObject implements ICentraleBank {
 	}
 
     @Override
+    public void addBank(IBank bank) throws RemoteException
+    {
+        //Check if the bank already exists
+        for (IBank b : banken) {
+            if (b.getName().matches(bank.getName())) {
+                //If the bank's name is found in the list return.
+                return;
+            }
+        }
+
+        banken.add(bank);
+    }
+
+    @Override
     public boolean voegTransactieToe(IRekening rekeningVan, int rekeningNaar, double bedrag)    {
         IRekening iRekeningNaar;
         for (IBank bank : banken) {

@@ -1,6 +1,9 @@
 package bank.bankieren;
 
+import bank.internettoegang.IBalie;
 import fontys.util.*;
+
+import java.rmi.RemoteException;
 
 /**
  * @author 871059
@@ -52,4 +55,8 @@ public interface IBank {
      * @return de naam van deze bank
      */
     String getName();
+
+    IBalie getBalie() throws RemoteException;
+
+    void setBalie(IBalie balie) throws RemoteException;
 }

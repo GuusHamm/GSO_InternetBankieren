@@ -1,5 +1,6 @@
 package bank.bankieren;
 
+import bank.internettoegang.IBalie;
 import bank.server.ICentraleBank;
 import fontys.util.NumberDoesntExistException;
 
@@ -20,6 +21,7 @@ public class Bank implements IBank {
 	private int nieuwReknr;
 	private String name;
 	private ICentraleBank centraleBank;
+	private IBalie balie;
 
 	public Bank(String name) {
 		accounts = new HashMap<Integer,IRekeningTbvBank>();
@@ -107,6 +109,18 @@ public class Bank implements IBank {
 	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public IBalie getBalie() throws RemoteException
+	{
+		return balie;
+	}
+
+	@Override
+	public void setBalie(IBalie balie) throws RemoteException
+	{
+		this.balie = balie;
 	}
 
 }

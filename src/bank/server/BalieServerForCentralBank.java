@@ -2,6 +2,7 @@ package bank.server;
 
 import bank.bankieren.Bank;
 import bank.gui.BankierClient;
+import bank.internettoegang.Balie;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ public class BalieServerForCentralBank extends Application
     private final double MINIMUM_WINDOW_HEIGHT = 200.0;
     private String nameBank;
     private CentraleBank centraleBank;
+    private Balie balie;
 
 
     @Override
@@ -55,10 +57,10 @@ public class BalieServerForCentralBank extends Application
     }
 
     private Initializable replaceSceneContent(String fxml) throws Exception {
-        FXMLLoader  loader = new FXMLLoader();
-        InputStream in     = BalieServer.class.getResourceAsStream(fxml);
+        FXMLLoader loader = new FXMLLoader();
+        InputStream in = BalieServerForCentralBank.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
-        loader.setLocation(BalieServer.class.getResource(fxml));
+        loader.setLocation(BalieServerForCentralBank.class.getResource(fxml));
         AnchorPane page;
         try {
             page = (AnchorPane) loader.load(in);
@@ -76,11 +78,20 @@ public class BalieServerForCentralBank extends Application
         try
         {
             Bank bank = new Bank(nameBank, centraleBank);
+            balie = new Balie(bank);
+            bank.setBalie(balie);
+            centraleBank.addBank(bank);
 
+            return true;
         }
         catch (RemoteException e)
         {
             e.printStackTrace();
+            return false;
         }
+    }
+
+    public void setCentraleBank(CentraleBank cb) {
+        this.centraleBank = cb;
     }
 }

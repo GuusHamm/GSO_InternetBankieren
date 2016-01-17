@@ -16,8 +16,8 @@ import java.util.Properties;
 public class CentraleBankServer extends Application
 {
     private CentraleBank centraleBank;
-    private BalieServer balieServer;
-    private BalieServer secondBalieServer;
+    private BalieServerForCentralBank balieServer;
+    private BalieServerForCentralBank secondBalieServer;
 
 
     @Override
@@ -27,11 +27,11 @@ public class CentraleBankServer extends Application
 
         createRMI();
 
-        balieServer = new BalieServer();
+        balieServer = new BalieServerForCentralBank();
         balieServer.setCentraleBank(centraleBank);
         balieServer.start(new Stage());
 
-        secondBalieServer = new BalieServer();
+        secondBalieServer = new BalieServerForCentralBank();
         secondBalieServer.setCentraleBank(centraleBank);
         secondBalieServer.start(new Stage());
 
