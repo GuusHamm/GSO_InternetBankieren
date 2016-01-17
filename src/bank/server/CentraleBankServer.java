@@ -17,7 +17,7 @@ public class CentraleBankServer extends Application
 {
     private CentraleBank centraleBank;
     private BalieServer balieServer;
-    private BalieServer balieServer2;
+    private BalieServer secondBalieServer;
 
 
     @Override
@@ -26,6 +26,16 @@ public class CentraleBankServer extends Application
         centraleBank = new CentraleBank();
 
         createRMI();
+
+        balieServer = new BalieServer();
+        balieServer.setCentraleBank(centraleBank);
+        balieServer.start(new Stage());
+
+        secondBalieServer = new BalieServer();
+        secondBalieServer.setCentraleBank(centraleBank);
+        secondBalieServer.start(new Stage());
+
+
     }
 
     public void createRMI() {

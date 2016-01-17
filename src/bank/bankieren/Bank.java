@@ -1,7 +1,9 @@
 package bank.bankieren;
 
+import bank.server.ICentraleBank;
 import fontys.util.NumberDoesntExistException;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,12 +19,34 @@ public class Bank implements IBank {
 	private Collection<IKlant> clients;
 	private int nieuwReknr;
 	private String name;
+	private ICentraleBank centraleBank;
 
 	public Bank(String name) {
 		accounts = new HashMap<Integer,IRekeningTbvBank>();
 		clients = new ArrayList<IKlant>();
 		nieuwReknr = 100000000;	
 		this.name = name;	
+	}
+
+	public Bank(String name, ICentraleBank cb) throws RemoteException {
+		accounts = new HashMap<Integer,IRekeningTbvBank>();
+		clients = new ArrayList<IKlant>();
+		this.name = name;
+		nieuwReknr = 1000;
+		if (name == "ING") {
+			nieuwReknr = 2000;
+		}
+		else if (name == "SNS") {
+			nieuwReknr = 3000;
+		}
+		else if (name == "ABN AMRO") {
+			nieuwReknr = 4000;
+		}
+		else if (name == "ASN") {
+			nieuwReknr = 5000;
+		}
+
+		centraleBank = cb;
 	}
 
 	public int openRekening(String name, String city) {
