@@ -57,7 +57,7 @@ public class BankierClient extends Application {
     }
     
     
-     protected IBalie connectToBalie(String bankName) {
+     public IBalie connectToBalie(String bankName) {
         try {
             FileInputStream in = new FileInputStream(bankName+".props");
             Properties props = new Properties();
