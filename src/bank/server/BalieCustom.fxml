@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="602.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.server.BalieControllerForCentralBank">
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="602.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bank.server.BalieControllerCustom">
     <stylesheets>
         <URL value="@balie.css" />
     </stylesheets>
