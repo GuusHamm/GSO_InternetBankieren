@@ -4,17 +4,21 @@ import bank.bankieren.Bank;
 import bank.bankieren.IBank;
 import bank.bankieren.IRekening;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 /**
  * Created by guushamm on 12-1-16.
  */
-public class CentraleBank implements ICentraleBank {
+public class CentraleBank extends UnicastRemoteObject implements ICentraleBank {
 	private ArrayList<IBank> banken;
 	private int nextRekeningNR;
 
-    public CentraleBank() {
+    public CentraleBank() throws RemoteException {
         //Constructor
+        banken = new ArrayList<>();
+
 		banken.add(new Bank("SNS"));
 		banken.add(new Bank("RaboBank"));
 		banken.add(new Bank("ING"));
