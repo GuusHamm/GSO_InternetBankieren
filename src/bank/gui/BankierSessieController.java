@@ -9,6 +9,7 @@ import bank.bankieren.IRekening;
 import bank.bankieren.Money;
 import bank.internettoegang.IBalie;
 import bank.internettoegang.IBankiersessie;
+import fontys.observer.RemotePropertyListener;
 import fontys.util.InvalidSessionException;
 import fontys.util.NumberDoesntExistException;
 import javafx.application.Platform;
@@ -33,7 +34,8 @@ import java.util.logging.Logger;
  *
  * @author frankcoenen
  */
-public class BankierSessieController extends UnicastRemoteObject implements Initializable, IBankierSessieController {
+public class BankierSessieController extends UnicastRemoteObject implements Initializable, RemotePropertyListener
+{
 
     @FXML
     private Hyperlink hlLogout;
@@ -58,7 +60,7 @@ public class BankierSessieController extends UnicastRemoteObject implements Init
     private IBalie balie;
     private IBankiersessie sessie;
 
-    protected BankierSessieController() throws RemoteException
+    public BankierSessieController() throws RemoteException
     {
     }
 
