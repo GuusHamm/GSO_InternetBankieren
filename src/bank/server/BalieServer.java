@@ -111,6 +111,10 @@ public class BalieServer extends Application {
         return (Initializable) loader.getController();
     }
 
+    public void setCentraleBank(CentraleBank cb) {
+        this.centraleBank = cb;
+    }
+
     /**
      * @param args the command line arguments
      */

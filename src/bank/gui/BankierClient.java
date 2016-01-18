@@ -11,8 +11,10 @@
 
 package bank.gui;
 
+import bank.bankieren.IBank;
 import bank.internettoegang.IBalie;
 import bank.internettoegang.IBankiersessie;
+import bank.server.ICentraleBank;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,9 +24,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,21 +62,68 @@ public class BankierClient extends Application {
     
     
      public IBalie connectToBalie(String bankName) {
-        try {
-            FileInputStream in = new FileInputStream(bankName+".props");
-            Properties props = new Properties();
-            props.load(in);
-            String rmiBalie = props.getProperty("balie");
-            in.close();
+//        try {
+//            FileInputStream in = new FileInputStream(bankName+".props");
+//            Properties props = new Properties();
+//            props.load(in);
+//            String rmiBalie = props.getProperty("balie");
+//            in.close();
+//
+//            IBalie balie = (IBalie) Naming.lookup("rmi://" + rmiBalie);
+//                        return balie;
+//
+//            } catch (Exception exc) {
+//                exc.printStackTrace();
+//                return null;
+//            }
 
-            IBalie balie = (IBalie) Naming.lookup("rmi://" + rmiBalie);
-                        return balie;
+         //Because Central bank is being used and not a normal BalieServer, this needs to be edited
+             try
+             {
+                 FileInputStream in = new FileInputStream("cb" + ".props");
+                 Properties properties = new Properties();
+                 properties.load(in);
+                 String centralBankRmi = properties.getProperty("cb");
+                 in.close();
 
-            } catch (Exception exc) {
-                exc.printStackTrace();
-                return null;
-            }
-    }
+                 //Get the Central bank.
+                 ICentraleBank cb = (ICentraleBank) Naming.lookup("rmi://" + centralBankRmi);
+
+                 for (IBank b : cb.getBanken()) {
+                     if (b.getBalie() == null) {
+                         System.out.println("Bank: " + b.getName() + " does not have a balie");
+                     }
+                     else {
+                         System.out.println("Bank: " + b.getName() + " has a balie");
+                     }
+                 }
+
+                 //Get the bank with the bankname
+                 IBank bank = cb.getBank(bankName);
+
+                 if (bank != null) {
+                     IBalie balie = bank.getBalie();
+                     return balie;
+                 } else {
+                     System.out.println("Bank is null");
+
+                 }
+             }
+             catch (FileNotFoundException e)
+             {
+                 e.printStackTrace();
+             }
+             catch (IOException e)
+             {
+                 e.printStackTrace();
+             }
+             catch (NotBoundException e)
+             {
+                 e.printStackTrace();
+             }
+            //Bank has not been found or there was an error.
+             return null;
+         }
     
 
      protected void gotoBankSelect() {

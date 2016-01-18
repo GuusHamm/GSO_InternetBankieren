@@ -47,8 +47,15 @@ public class BankSelectController implements Initializable {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
                 bankNaam = (String) ov.getValue();
+                System.out.println("Trying to connect to : " + bankNaam);
                 IBalie balie =  application.connectToBalie(bankNaam);
-                application.gotoLogin(balie, "");
+                if (balie == null) {
+                    System.out.println("Balie is null!! BankSelectController");
+                }
+                else {
+                    application.gotoLogin(balie, "");
+                }
+
             }
         }
         );

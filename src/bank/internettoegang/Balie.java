@@ -42,7 +42,15 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 		if (wachtwoord.length() < 4 ||	 wachtwoord.length() > 8)
 			return null;
 
-		int nr = bank.openRekening(naam, plaats);
+		int nr = 0;
+		try {
+			nr = bank.openRekening(naam, plaats);
+		}
+		catch (RemoteException e)
+		{
+			e.printStackTrace();
+		}
+
 		//-1 will only occur when name or city is empty, which is already caught in the lines above.
 //		if (nr == -1)
 //			return null;
