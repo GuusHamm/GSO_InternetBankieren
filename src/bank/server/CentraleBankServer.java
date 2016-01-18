@@ -1,5 +1,6 @@
 package bank.server;
 
+import bank.bankieren.CentraleBank;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -6,6 +6,7 @@
 package bank.server;
 
 import bank.bankieren.Bank;
+import bank.bankieren.CentraleBank;
 import bank.gui.BankierClient;
 import bank.internettoegang.Balie;
 import bank.internettoegang.IBalie;
