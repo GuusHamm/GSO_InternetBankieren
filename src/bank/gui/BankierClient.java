@@ -89,6 +89,15 @@ public class BankierClient extends Application {
                  //Get the Central bank.
                  ICentraleBank cb = (ICentraleBank) Naming.lookup("rmi://" + centralBankRmi);
 
+                 for (IBank b : cb.getBanken()) {
+                     if (b.getBalie() == null) {
+                         System.out.println("Bank: " + b.getName() + " does not have a balie");
+                     }
+                     else {
+                         System.out.println("Bank: " + b.getName() + " has a balie");
+                     }
+                 }
+
                  //Get the bank with the bankname
                  IBank bank = cb.getBank(bankName);
 
@@ -96,7 +105,7 @@ public class BankierClient extends Application {
                      IBalie balie = bank.getBalie();
                      return balie;
                  } else {
-                     System.out.println("Balie is null");
+                     System.out.println("Bank is null");
 
                  }
              }

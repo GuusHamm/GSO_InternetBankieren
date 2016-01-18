@@ -5,12 +5,13 @@ import bank.server.ICentraleBank;
 import fontys.util.NumberDoesntExistException;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Bank implements IBank {
+public class Bank extends UnicastRemoteObject implements IBank {
 
 	/**
 	 * 
@@ -23,7 +24,7 @@ public class Bank implements IBank {
 	private ICentraleBank centraleBank;
 	private IBalie balie;
 
-	public Bank(String name) {
+	public Bank(String name) throws RemoteException {
 		accounts = new HashMap<Integer,IRekeningTbvBank>();
 		clients = new ArrayList<IKlant>();
 		nieuwReknr = 100000000;	

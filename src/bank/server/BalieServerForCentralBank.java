@@ -77,15 +77,19 @@ public class BalieServerForCentralBank extends Application
         nameBank = bankName;
         try
         {
+            System.out.println("Starting Balie");
             Bank bank = new Bank(nameBank, centraleBank);
             balie = new Balie(bank);
+            System.out.println("Setting Balie at Bank: " + bank.getName());
             bank.setBalie(balie);
             centraleBank.addBank(bank);
 
+            System.out.println("Started Balie");
             return true;
         }
         catch (RemoteException e)
         {
+            System.out.println("Failed to start Balie");
             e.printStackTrace();
             return false;
         }
