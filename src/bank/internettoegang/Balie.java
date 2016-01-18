@@ -3,11 +3,14 @@ package bank.internettoegang;
 import bank.bankieren.IBank;
 import fontys.observer.BasicPublisher;
 import fontys.observer.RemotePropertyListener;
+import fontys.util.InvalidSessionException;
 
 import java.beans.PropertyChangeEvent;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 public class Balie extends UnicastRemoteObject implements IBalie {
@@ -15,7 +18,7 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 	private static final long serialVersionUID = -4194975069137290780L;
 	private IBank bank;
 	private HashMap<String, ILoginAccount> loginaccounts;
-	//private Collection<IBankiersessie> sessions;
+	private Collection<IBankiersessie> sessions;
 	private java.util.Random random;
 
 	//Basic publisher
@@ -24,7 +27,7 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 	public Balie(IBank bank) throws RemoteException {
 		this.bank = bank;
 		loginaccounts = new HashMap<String, ILoginAccount>();
-		//sessions = new HashSet<IBankiersessie>();
+		sessions = new HashSet<IBankiersessie>();
 		random = new Random();
 
 		//Basic publisher stuff
@@ -72,7 +75,8 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 		if (loginaccount.checkWachtwoord(wachtwoord)) {
 			IBankiersessie sessie = new Bankiersessie(loginaccount
 					.getReknr(), bank);
-			
+
+			sessions.add(sessie);
 		 	sessie.addListener(this, "RekeningSessie");
 			return sessie;
 		}
@@ -88,6 +92,27 @@ public class Balie extends UnicastRemoteObject implements IBalie {
 			s.append(CHARS.charAt(rand));
 		}
 		return s.toString();
+	}
+
+	@Override
+	public IBankiersessie getSessie(int rekeningNr) {
+		for (IBankiersessie iBankiersessie : sessions) {
+			try
+			{
+				if (iBankiersessie.getRekening().getNr() == rekeningNr) {
+                    return iBankiersessie;
+                }
+			}
+			catch (InvalidSessionException e)
+			{
+				e.printStackTrace();
+			}
+			catch (RemoteException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 

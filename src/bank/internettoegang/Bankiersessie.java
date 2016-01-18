@@ -64,6 +64,11 @@ public class Bankiersessie extends UnicastRemoteObject implements
 	}
 
 	@Override
+	public void update() {
+		basicPublisher.inform(this, "RekeningSessie", null, reknr);
+	}
+
+	@Override
 	public IRekening getRekening() throws InvalidSessionException,
 			RemoteException {
 

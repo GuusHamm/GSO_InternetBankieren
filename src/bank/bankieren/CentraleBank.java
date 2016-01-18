@@ -1,12 +1,9 @@
-package bank.server;
-
-import bank.bankieren.Bank;
-import bank.bankieren.IBank;
-import bank.bankieren.IRekening;
+package bank.bankieren;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by guushamm on 12-1-16.
@@ -35,6 +32,28 @@ public class CentraleBank extends UnicastRemoteObject implements ICentraleBank {
 
     }
 
+	@Override
+	public HashMap<IRekening, IBank> getIRekening(int rekeningnummer){
+        IRekening rek;
+        try
+        {
+            for (IBank b : getBanken())
+            {
+                if (b.getRekening(rekeningnummer) != null)
+                {
+					HashMap<IRekening,IBank> returnStuff = new HashMap<IRekening,IBank>();
+					returnStuff.put(b.getRekening(rekeningnummer),b);
+                    return returnStuff;
+                }
+            }
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+		return null;
+	}
+
     public ArrayList<IBank> getBanken() {
         return banken;
     }
@@ -60,6 +79,15 @@ public class CentraleBank extends UnicastRemoteObject implements ICentraleBank {
         return null;
 	}
 
+	public IBank getBank(int rekeningnummer){
+		HashMap<IRekening,IBank> result = getIRekening(rekeningnummer);
+
+		for (IBank iBank : result.values()){
+			return iBank;
+		}
+		return null;
+	}
+
     @Override
     public void addBank(IBank bank) throws RemoteException
     {
@@ -75,8 +103,8 @@ public class CentraleBank extends UnicastRemoteObject implements ICentraleBank {
     }
 
     @Override
-    public boolean voegTransactieToe(IRekening rekeningVan, int rekeningNaar, double bedrag)    {
-        IRekening iRekeningNaar;
+    public boolean voegTransactieToe(IRekening rekeningVan, int rekeningNaar, Money bedrag)    {
+        IRekening iRekeningNaar = null;
         try
         {
             for (IBank bank : banken)
@@ -84,6 +112,8 @@ public class CentraleBank extends UnicastRemoteObject implements ICentraleBank {
                 if (bank.getRekening(rekeningNaar) != null)
                 {
                     iRekeningNaar = bank.getRekening(rekeningNaar);
+					bank.muteer(iRekeningNaar,bedrag);
+                    bank.getBalie().getSessie(rekeningNaar).update();
                 }
             }
         }

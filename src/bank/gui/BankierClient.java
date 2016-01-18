@@ -14,7 +14,7 @@ package bank.gui;
 import bank.bankieren.IBank;
 import bank.internettoegang.IBalie;
 import bank.internettoegang.IBankiersessie;
-import bank.server.ICentraleBank;
+import bank.bankieren.ICentraleBank;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

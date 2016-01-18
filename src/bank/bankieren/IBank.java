@@ -61,4 +61,6 @@ public interface IBank extends Remote
     IBalie getBalie() throws RemoteException;
 
     void setBalie(IBalie balie) throws RemoteException;
+
+    void muteer(IRekening iRekening, Money money) throws RemoteException;
 }

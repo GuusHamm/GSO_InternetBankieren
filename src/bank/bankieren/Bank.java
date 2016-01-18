@@ -1,7 +1,7 @@
 package bank.bankieren;
 
 import bank.internettoegang.IBalie;
-import bank.server.ICentraleBank;
+import bank.internettoegang.IBankiersessie;
 import fontys.util.NumberDoesntExistException;
 
 import java.rmi.RemoteException;
@@ -96,10 +96,92 @@ public class Bank extends UnicastRemoteObject implements IBank {
 		if (!success)
 			return false;
 
+
+
+//		if (centraleBank != null){
+//			try {
+//				centraleBank.voegTransactieToe(source_account,destination,money);
+//			} catch (RemoteException e) {
+//				e.printStackTrace();
+//			}
+//			return true;
+//		}
+
+//		else{
+//			dest_account = (IRekeningTbvBank) getRekening(destination);
+//		}
+
+		//Haal de rekening op
 		IRekeningTbvBank dest_account = (IRekeningTbvBank) getRekening(destination);
-		if (dest_account == null) 
-			throw new NumberDoesntExistException("account " + destination
-					+ " unknown at " + name);
+		if (dest_account == null)
+		{
+			Bank bank = null;
+
+			//Get the bank of the destination
+			try
+			{
+				bank = (Bank)centraleBank.getBank(destination);
+			}
+			catch(RemoteException ex)
+			{
+				System.out.println("RemoteException: " + ex.getMessage());
+			}
+
+			//Check if the bank exists
+			if(bank == null) {
+				source_account.muteer(money);
+				throw new NumberDoesntExistException("account " + source
+															 + " unknown at every bank");
+			}
+			//If it exists, try to transfer the money
+			else {
+				if(!bank.maakOverAndereBank(destination, money)) {
+					//If it failed, reset the money
+					source_account.muteer(money);
+					return false;
+				}
+
+				try
+				{
+					IBankiersessie ibs = bank.getBalie().getSessie(destination);
+					if (ibs != null)
+					{
+						ibs.update();
+					}
+				}
+				catch (RemoteException ex)
+				{
+					System.out.println("RemoteException: " + ex.getMessage());
+				}
+
+				return true;
+			}
+
+		}
+
+		success = dest_account.muteer(money);
+
+		if (!success) // rollback
+			source_account.muteer(money);
+		else
+		{
+			//balie.updateBankiersessie(destination, money);
+			//balie.updateBankiersessie(source, money);
+
+			try
+			{
+				IBankiersessie ibs = balie.getSessie(destination);
+				if (ibs != null)
+				{
+					ibs.update();
+				}
+			}
+			catch (RemoteException ex)
+			{
+				System.out.println("RemoteException: " + ex.getMessage());
+			}
+		}
+		//Change the saldo of the opposite Account.
 		success = dest_account.muteer(money);
 
 		if (!success) // rollback
@@ -122,6 +204,24 @@ public class Bank extends UnicastRemoteObject implements IBank {
 	public void setBalie(IBalie balie) throws RemoteException
 	{
 		this.balie = balie;
+	}
+
+	public boolean maakOverAndereBank(int destination, Money money){
+		Money negative = Money.difference(new Money(0, money.getCurrency()),
+										  money);
+		boolean success;
+
+		IRekeningTbvBank dest_account = (IRekeningTbvBank) getRekening(destination);
+
+		success = dest_account.muteer(money);
+
+		return success;
+	}
+
+	@Override
+	public void muteer(IRekening iRekening, Money money){
+		IRekeningTbvBank iRekeningTbvBank = (IRekeningTbvBank) iRekening;
+		iRekeningTbvBank.muteer(money);
 	}
 
 }

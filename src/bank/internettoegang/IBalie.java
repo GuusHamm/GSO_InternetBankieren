@@ -1,5 +1,7 @@
 package bank.internettoegang;
 
+import bank.bankieren.IRekening;
+import bank.bankieren.Money;
 import fontys.observer.RemotePropertyListener;
 import fontys.observer.RemotePublisher;
 
@@ -35,5 +37,6 @@ public interface IBalie extends Remote, RemotePublisher, RemotePropertyListener,
    */
   IBankiersessie logIn(String accountnaam, String wachtwoord) throws RemoteException;
 
+  IBankiersessie getSessie(int rekeningNr) throws RemoteException;
 }
 
